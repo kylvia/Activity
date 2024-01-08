@@ -43,8 +43,7 @@ const useActivity = (props: TOffScreen) => {
 
   useEffect(() => {
     setOutlets((prev) => {
-      const draft: TOutlet[] = prev ? cloneDeep(prev) : [];
-      const index = draft.findIndex((v) => v.key === key);
+      const index = prev.findIndex((v) => v.key === key);
       const initItem: TOutlet = {
         scrollOffset: 0,
         key,
@@ -60,15 +59,14 @@ const useActivity = (props: TOffScreen) => {
       if (action !== 'POP') {
         return [...(prev?.filter((v) => v.key !== key) ?? []), initItem];
       }
-      cacheNodeRef.current = draft[index]?.compRef;
+      cacheNodeRef.current = prev[index]?.compRef;
       return prev;
     });
     return () => {
       const cacheScrollNodes = cacheNodesScrollRef.current;
       const compRef = cacheNodeRef.current;
       setOutlets((prev) => {
-        const draft: TOutlet[] = prev ? cloneDeep(prev) : [];
-        const index = draft.findIndex((v) => v.key === key);
+        const index = prev.findIndex((v) => v.key === key);
         cacheNodesScrollRef.current = undefined;
         cacheNodeRef.current = undefined;
         if (index !== -1) {
